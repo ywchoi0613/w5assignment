@@ -41,7 +41,7 @@ int main() {
 	for (int i = 0; i < n[0]; i++) {  //sprint3-1
 		data[i] = short(a[0] * sin(2.0 * pi * i * dt));
 	}
-	ofstream yyy("a.dat", ios::binary | ios::out);  //sprint3-2
+	ofstream yyy("b.dat", ios::binary | ios::out);  //sprint3-2
 	if (!yyy) return 666;
 	yyy.write(header, 12 * sizeof(char));
 	yyy.write((char *)data, n[0] * sizeof(short));
@@ -50,7 +50,7 @@ int main() {
 	short *data1, *data2;
 	data1 = new short[*n];
 	data2 = new short[*n];
-	ifstream zz("a.dat", ios::binary | ios::in);  //sprint4
+	ifstream zz("b.dat", ios::binary | ios::in);  //sprint4
 	if (!zz) return 666;
 	zz.read((char*)data1, n[0] * sizeof(short));
 	zz.read((char*)data2, n[0] * sizeof(short));
