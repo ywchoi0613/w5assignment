@@ -1,31 +1,64 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.5.33516.290
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "w5assignment", "w5assignment\w5assignment.vcxproj", "{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
-		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Debug|x64.ActiveCfg = Debug|x64
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Debug|x64.Build.0 = Debug|x64
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Debug|x86.ActiveCfg = Debug|Win32
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Debug|x86.Build.0 = Debug|Win32
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Release|x64.ActiveCfg = Release|x64
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Release|x64.Build.0 = Release|x64
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Release|x86.ActiveCfg = Release|Win32
-		{6154A2A9-E269-4DC6-8CDF-DCD499F54E36}.Release|x86.Build.0 = Release|Win32
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {74833422-4DB0-4DC1-B00A-74F953A09F6B}
-	EndGlobalSection
-EndGlobal
+#include <iostream>
+#include <fstream>
+#include <cmath>
+using namespace std;
+const float pi = 3.141592;
+int main() {
+	int *n;
+	float *f, samples[200];
+	short *p, *a, *data;
+	char header[12];  //sprint1-1
+	n = (int*)header;
+	*n = 500;
+	f = (float*)(header + 4);
+	*f = 1000;
+	p = (short*)(header + 10);
+	*p = 12;
+	a = (short*)(header + 8);
+	*a = 15000;
+	data = new short[*n];
+	float dt = 1. / f[0] / 20.0;
+
+	ofstream xx("a.dat", ios::binary | ios::out);  //sprint1-2
+	if (!xx) return 666; 
+	xx.write(header, 12 * sizeof(char));
+	xx.close();
+
+	ifstream xxx("a.dat", ios::binary | ios::in);
+	if (!xxx) return 666;
+	xxx.read(header, 12 * sizeof(char));  //sprint2-1
+	cout << "  n" << * n << endl;  //sprint2-2
+	cout << "  f" << * f << endl;
+	cout << "  p" << * p << endl;
+	cout << "  a" << * a << endl;
+	xxx.close();
+
+	ofstream yy("a.dat", ios::binary | ios::out);
+	if (!yy) return 666;
+	*f = 700.0;  //sprint2-3
+	yy.close();
+
+	for (int i = 0; i < n[0]; i++) {  //sprint3-1
+		data[i] = short(a[0] * sin(2.0 * pi * i * dt));
+	}
+	ofstream yyy("a.dat", ios::binary | ios::out);  //sprint3-2
+	if (!yyy) return 666;
+	yyy.write(header, 12 * sizeof(char));
+	yyy.write((char *)data, n[0] * sizeof(short));
+	yyy.close();
+
+	short *data1, *data2;
+	data1 = new short[*n];
+	data2 = new short[*n];
+	ifstream zz("a.dat", ios::binary | ios::in);  //sprint4
+	if (!zz) return 666;
+	zz.read((char*)data1, n[0] * sizeof(short));
+	zz.read((char*)data2, n[0] * sizeof(short));
+	zz.close();
+	ofstream zzz("c.txt");
+	if (!zzz) return 666;
+	for (int i = 0; i < n[0]; i++) {
+		zzz << i * dt << " " << data1[i] << " " << data2[i] << endl;
+	}
+	zzz.close();
+}
