@@ -78,7 +78,7 @@ int main() {
 	ofstream zzz("c.txt");
 	if (!zzz) return 666;
 	for (int i = 0; i < n[0]; i++) {
-		zzz << i*dt1 << " " << data1[i] << " " << data2[i] << endl;
+		zzz << i*dt1 << " " << data1[i] << " " << i*dt2 << " " << data2[i] << endl;
 	}
 	zzz.close();
 }
